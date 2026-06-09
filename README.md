@@ -1,3 +1,10 @@
+## Live Demo
+
+https://task-manager-pro-g0lp.onrender.com
+
+## GitHub Repository
+
+https://github.com/jo-123456/Task-Manager-Pro-
 # Task Manager Pro
 
 A modern full-stack Task Management Application built with Node.js, Express.js, MongoDB, and Bootstrap. Users can register, log in, create tasks, manage priorities, track due dates, and monitor progress through an interactive dashboard.
