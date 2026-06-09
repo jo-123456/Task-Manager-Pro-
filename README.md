@@ -1,182 +1,216 @@
-## Live Demo
-
-https://task-manager-pro-g0lp.onrender.com
-
-## GitHub Repository
-
-https://github.com/jo-123456/Task-Manager-Pro-
 # Task Manager Pro
 
-A modern full-stack Task Management Application built with Node.js, Express.js, MongoDB, and Bootstrap. Users can register, log in, create tasks, manage priorities, track due dates, and monitor progress through an interactive dashboard.
+A full-stack task management web application built with Node.js, Express.js, MongoDB Atlas, and Bootstrap 5. Users can register, log in, and manage their tasks with full CRUD support, priority tracking, due dates, and a live productivity dashboard.
+
+---
+
+## Table of Contents
+
+- [Live Demo](#live-demo)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [API Reference](#api-reference)
+- [Project Structure](#project-structure)
+- [Screenshots](#screenshots)
+- [Future Enhancements](#future-enhancements)
+- [License](#license)
+
+---
+
+## Live Demo
+
+🔗 [https://task-manager-pro.onrender.com](https://task-manager-pro.onrender.com)
+
+> Hosted on Render. The instance may spin down after inactivity — allow 30 seconds for a cold start.
+
+---
 
 ## Features
 
-### Authentication
+- **Authentication** — Register and log in securely; passwords hashed with bcrypt.js; sessions managed via JWT
+- **Dashboard** — Live stats for Total, Pending, Completed, and High Priority tasks
+- **Task CRUD** — Create, read, update, and delete tasks; each task is private to its owner
+- **Priority Levels** — Low / Medium / High with colour-coded badges
+- **Status Tracking** — Open / In Progress / Completed
+- **Due Dates** — Optional due date per task with visual indicators
+- **Search** — Real-time client-side search across task titles and descriptions
+- **Filters** — Filter by status and priority, independently or combined
+- **Responsive Design** — Works on desktop, tablet, and mobile via Bootstrap 5
 
-* User Registration
-* User Login
-* JWT Authentication
-* Protected Routes
-
-### Task Management
-
-* Create Tasks
-* View Tasks
-* Update Tasks
-* Delete Tasks
-* Task Status Tracking
-* Task Priority Levels
-* Due Date Management
-
-### Dashboard
-
-* Professional Dark Theme
-* Statistics Cards
-* Search Tasks
-* Filter by Status
-* Filter by Priority
-* Responsive Design
-* Analytics Section
-* Sidebar Navigation
+---
 
 ## Tech Stack
 
-### Frontend
+| Layer | Technology |
+|---|---|
+| Frontend | HTML5, CSS3, Bootstrap 5, JavaScript (ES6+) |
+| Backend | Node.js, Express.js |
+| Database | MongoDB Atlas, Mongoose ODM |
+| Authentication | JWT (jsonwebtoken), bcrypt.js |
+| Deployment | Render (backend + frontend), GitHub |
 
-* HTML5
-* CSS3
-* Bootstrap 5
-* JavaScript
+---
 
-### Backend
+## Getting Started
 
-* Node.js
-* Express.js
+### Prerequisites
 
-### Database
+- [Node.js](https://nodejs.org/) v18 or higher
+- [npm](https://www.npmjs.com/) v9 or higher
+- A [MongoDB Atlas](https://www.mongodb.com/atlas) cluster (free tier works fine)
 
-* MongoDB Atlas
-* Mongoose
-
-### Authentication
-
-* JSON Web Token (JWT)
-* bcrypt.js
-
-## Project Structure
-
-```text
-Task-Manager-Pro
-│
-├── middleware
-│   └── auth.js
-│
-├── models
-│   ├── User.js
-│   └── Task.js
-│
-├── routes
-│   ├── auth.js
-│   └── task.js
-│
-├── public
-│   ├── login.html
-│   ├── register.html
-│   └── dashboard.html
-│
-├── .env
-├── server.js
-├── package.json
-└── README.md
-```
-
-## Installation
-
-### Clone Repository
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/jo-123456/Task-Manager-Pro-.git
+git clone https://github.com/your-username/task-manager-pro.git
+cd task-manager-pro
 ```
 
-### Move into Project Directory
-
-```bash
-cd Task-Manager-Pro-
-```
-
-### Install Dependencies
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### Configure Environment Variables
+### 3. Configure environment variables
 
-Create a `.env` file:
+Create a `.env` file in the project root (see [Environment Variables](#environment-variables) below).
 
-```env
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-PORT=5000
+### 4. Start the development server
+
+```bash
+npm run dev
 ```
 
-### Run Application
+The app will be available at `http://localhost:5000`.
+
+### 5. Build for production
 
 ```bash
 npm start
 ```
 
-or
+---
 
-```bash
-node server.js
+## Environment Variables
+
+Create a `.env` file in the root directory with the following keys:
+
+```env
+# MongoDB Atlas connection string
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/taskmanager?retryWrites=true&w=majority
+
+# JWT secret — use a long, random string in production
+JWT_SECRET=your_super_secret_key_here
+
+# JWT expiry window
+JWT_EXPIRES_IN=7d
+
+# Server port (optional — defaults to 5000)
+PORT=5000
 ```
 
-Application will run at:
+> ⚠️ Never commit your `.env` file. It is already included in `.gitignore`.
 
-```text
-http://localhost:5000
+---
+
+## API Reference
+
+All task endpoints require a valid JWT in the `Authorization` header:
+
+```
+Authorization: Bearer <token>
 ```
 
-## Screenshots
+### Auth
 
-### Login Page
+| Method | Endpoint | Auth | Body | Description |
+|---|---|---|---|---|
+| `POST` | `/api/auth/register` | None | `name`, `email`, `password` | Register a new user |
+| `POST` | `/api/auth/login` | None | `email`, `password` | Log in; returns JWT |
 
-Secure authentication system for users.
+### Tasks
 
-### Dashboard
+| Method | Endpoint | Auth | Body | Description |
+|---|---|---|---|---|
+| `GET` | `/api/tasks` | JWT | — | Get all tasks for the current user |
+| `POST` | `/api/tasks` | JWT | See below | Create a new task |
+| `GET` | `/api/tasks/:id` | JWT | — | Get a single task by ID |
+| `PUT` | `/api/tasks/:id` | JWT | See below | Update a task by ID |
+| `DELETE` | `/api/tasks/:id` | JWT | — | Delete a task by ID |
 
-Interactive dashboard displaying:
+#### Task body fields
 
-* Total Tasks
-* Completed Tasks
-* Pending Tasks
-* High Priority Tasks
+```json
+{
+  "title": "Finish project report",
+  "description": "Complete all sections and export as PDF",
+  "status": "In Progress",
+  "priority": "High",
+  "dueDate": "2026-06-15"
+}
+```
 
-### Task Management
+| Field | Type | Required | Values |
+|---|---|---|---|
+| `title` | String | Yes | Max 120 characters |
+| `description` | String | No | Free text |
+| `status` | String | No | `Open` · `In Progress` · `Completed` |
+| `priority` | String | No | `Low` · `Medium` · `High` |
+| `dueDate` | Date | No | ISO 8601 (`YYYY-MM-DD`) |
 
-Users can:
+---
 
-* Add Tasks
-* Update Tasks
-* Delete Tasks
-* Assign Priorities
-* Set Due Dates
+## Project Structure
+
+```
+task-manager-pro/
+├── config/
+│   └── db.js               # MongoDB Atlas connection
+├── middleware/
+│   └── auth.js             # JWT verification middleware
+├── models/
+│   ├── User.js             # Mongoose User schema
+│   └── Task.js             # Mongoose Task schema
+├── routes/
+│   ├── auth.js             # Register & login routes
+│   └── tasks.js            # CRUD routes for tasks
+├── public/
+│   ├── index.html          # Application shell
+│   ├── css/
+│   │   └── style.css       # Custom styles
+│   └── js/
+│       └── app.js          # Frontend logic & API calls
+├── .env                    # Environment variables (not committed)
+├── .gitignore
+├── package.json
+├── server.js               # Express app entry point
+└── README.md
+```
+
+---
 
 ## Future Enhancements
 
-* Real-Time Updates using WebSockets
-* Email Notifications
-* Team Collaboration
-* Drag-and-Drop Task Management
-* Calendar Integration
-* Dark/Light Theme Toggle
-* Data Export Features
+- [ ] Real-time updates via WebSockets (Socket.io)
+- [ ] Email notifications for due-date reminders (SendGrid)
+- [ ] Team workspaces with role-based access control
+- [ ] Kanban drag-and-drop board view
+- [ ] Google Calendar two-way sync
+- [ ] Advanced analytics and completion-rate charts
+- [ ] File attachments per task (AWS S3 / Cloudinary)
+- [ ] Light / dark mode toggle
+- [ ] React Native mobile app
+- [ ] CSV / PDF export
 
-## Author
-
-Jonsia Cejohn
+---
 
 ## License
 
-This project is developed for learning purposes and internship project submission.
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+> Built as a full-stack learning project. Contributions and feedback welcome — open an issue or submit a pull request.
