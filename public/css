@@ -1,0 +1,26 @@
+body{
+    background:linear-gradient(
+        135deg,
+        #6a11cb,
+        #2575fc
+    );
+    min-height:100vh;
+}
+
+.card{
+    border:none;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.btn-primary{
+    border-radius:10px;
+}
+
+.task-card{
+    transition:0.3s;
+}
+
+.task-card:hover{
+    transform:translateY(-5px);
+}
